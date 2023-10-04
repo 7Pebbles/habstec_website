@@ -20,6 +20,32 @@ class AjaxController extends Controller
     {
         //
     }
+
+
+
+
+    public function Home()
+    {
+        return view('index');
+    }
+    public function About()
+    {
+        return view('about');
+    }
+    public function BlogPage()
+    {
+        return view('blog');
+    }
+    public function GalleryPage()
+    {
+        $data = DB::table('gallery')->get();
+        return view('gallery', ["data"=>$data]);
+    }
+    public function Contact()
+    {
+        return view('contact');
+    }
+
     public function Login()
     {
         return view('Admin.Login');

@@ -13,9 +13,11 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
+$router->get('/', ["uses"=>"AjaxController@Home"]);
+$router->get('/about', ["uses"=>"AjaxController@About"]);
+$router->get('/gallery', ["uses"=>"AjaxController@GalleryPage"]);
+$router->get('/blog', ["uses"=>"AjaxController@BlogPage"]);
+$router->get('/contact', ["uses"=>"AjaxController@Contact"]);
 
 
 $router->get('Admin/Login',["as"=>"Login", "uses"=>"AjaxController@Login"]);

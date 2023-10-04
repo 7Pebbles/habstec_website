@@ -167,7 +167,7 @@
                     $("#submitbtn").prop('disabled', false)
                     if (res.success) {
                         swal("Success!", res.message, "success");
-                        GetData();
+                        // GetData();
                     } else {
                         swal("Error!", res.message, "error");
                     }
