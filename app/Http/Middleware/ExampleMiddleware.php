@@ -15,6 +15,13 @@ class ExampleMiddleware
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
+        session_start();
+        try {
+            if($_SESSION["user_id"] && $_SESSION["user_name"]){
+                return $next($request);
+            }
+        } catch (\Throwable $th) {
+         return redirect('Admin\Login');
+        }
     }
 }
