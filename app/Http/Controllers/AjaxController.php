@@ -24,17 +24,22 @@ class AjaxController extends Controller
 
 
 
-    public function Home()
+    public function Home(Request $req)
     {
+        $visitor = DB::table('visitor')->insert(['ip' => $req->getClientIp()]);
         return view('index');
     }
     public function About()
     {
         return view('about');
     }
-    public function BlogPage()
+    public function BlogPage(Request $req)
     {
-        return view('blog');
+        $blog = DB::table('blogs')->where('blog_title', 'LIKE', '%' . $req->input('search') . '%')->orderBy('blog_id', 'desc')->paginate(1);
+        $top_blog = DB::table('blogs')->orderBy('views', 'desc')->take(5)->get();
+        return view('blog', ['data' => $blog, 'top_blog' => $top_blog]);
+
+
     }
     public function GalleryPage()
     {

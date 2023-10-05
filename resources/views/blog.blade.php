@@ -29,179 +29,123 @@
 
             <main class="col-lg-7 col-xl-8">
 
+                @if (count($data)==0)
+                <div class="row justify-content-center col-12">
 
-                <article class="vertical-item ls text-center rounded post type-post status-publish format-standard has-post-thumbnail">
-                    <div class="item-media post-thumbnail">
-                        <a href="blog-single-right.html">
-                            <img src="{{url('public/template/images/blog/01.jpg')}}" alt="img">
-                        </a>
-                    </div><!-- .post-thumbnail -->
-                    <div class="item-content">
-                        <header class="entry-header">
-                            <div class="entry-meta">
-                                <div class="byline">
-                                    <span class="date">
-                                        <a href="blog-right.html" rel="bookmark">
-                                            <time class="published entry-date" datetime="2019-04-09T12:23:09+00:00">20.03.2019</time>
-                                        </a>
-                                    </span>
-                                    <span class="author vcard">
-                                        <a class="url fn n" href="blog-right.html" rel="author"><span>by</span> Admin</a>
-                                    </span>
+                    <div class="col-md-10 col-xl-8">
+                             <h3>No Blogs {{request('search') ? "matching ".request('search') : ""}}</h3>
+                    </div>
+                </div>
+                @else
+
+                    @foreach ($data as $row)
+                    <article class="vertical-item ls text-center rounded post type-post status-publish format-standard has-post-thumbnail">
+                        <div class="item-media post-thumbnail">
+                            <a href="{{url('blog')}}">
+                                <img src="{{url('public/blog/'.$row->blog_image)}}" alt="img">
+                            </a>
+                        </div><!-- .post-thumbnail -->
+                        <div class="item-content">
+                            <header class="entry-header">
+                                <div class="entry-meta">
+                                    <div class="byline">
+                                        <span class="date">
+                                            <a href="{{url('blog')}}" rel="bookmark">
+                                                <time class="published entry-date">{{ (new \DateTime($row->created_at))->format("d.m.Y") }}</time>
+                                            </a>
+                                        </span>
+                                        <span class="author vcard">
+                                            <a class="url fn n" href="{{url('blog')}}" rel="author"><span>by</span> Admin</a>
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <h3 class="entry-title">
-                                <a href="blog-single-right.html" rel="bookmark">
-                                    Sample Post With Image
-                                </a>
-                            </h3>
+                                <h3 class="entry-title">
+                                    <a href="{{url('blog')}}" rel="bookmark">
+                                       {{$row->blog_title}}
+                                    </a>
+                                </h3>
 
-                            <!-- .entry-meta -->
-                        </header>
-                        <!-- .entry-header -->
+                            </header>
 
-                        <div class="entry-content">
-                            <p>
-                                Tempor incididunt labore dolmagna aliqua eniminim veniam quis. Nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                commodo consequat duis aute.Irure dolor in reprehenderit in voluptate velit. Esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.
-                            </p>
-                        </div><!-- .entry-content -->
-                        <a class="btn btn-gradient big-btn" href="blog-single-full.html">read more</a>
+                            <div class="entry-content">
+                                <p>
+                                    {!! $row->blog_short_desc !!}
+                                </p>
+                            </div><!-- .entry-content -->
+                            <a class="btn btn-gradient big-btn" href="{{url('blog')}}">read more</a>
 
-                    </div><!-- .item-content -->
-                </article><!-- #post-## -->
+                        </div><!-- .item-content -->
+                    </article>
+                    @endforeach
+                @endif
 
-                <nav class="navigation pagination " role="navigation">
-                    {{-- <h2 class="screen-reader-text">Posts navigation</h2>
+
+                <nav class="navigation pagination" role="navigation">
+                    <h2 class="screen-reader-text">Posts navigation</h2>
                     <div class="nav-links">
-                        <a class="prev page-numbers" href="blog-right.html">
-                            <i class="fa fa-chevron-left"></i>
-                            <span class="screen-reader-text">Previous page</span>
-                        </a>
-                        <a class="page-numbers" href="blog-right.html">
-                            <span class="meta-nav screen-reader-text">Page </span>
-                            1
-                        </a>
-                        <span class="page-numbers current">
-                            <span class="meta-nav screen-reader-text">Page </span>
-                            2
-                        </span>
-                        <a class="page-numbers" href="blog-right.html">
-                            <span class="meta-nav screen-reader-text">Page </span>
-                            3
-                        </a>
-                        <a class="next page-numbers" href="blog-right.html">
-                            <span class="screen-reader-text">Next page</span>
-                            <i class="fa fa-chevron-right"></i>
-                        </a>
-                    </div> --}}
+                        @if ($data->previousPageUrl())
+                            <a class="prev page-numbers" href="{{ $data->previousPageUrl() }}">
+                                <span class="screen-reader-text">Previous page</span>
+                            </a>
+                        @endif
+
+                        @foreach ($data->getUrlRange(1, $data->lastPage()) as $page => $url)
+                            <a class="page-numbers{{ $page === $data->currentPage() ? ' current' : '' }}" href="{{ $url }}">
+                                <span class="meta-nav screen-reader-text">Page </span>
+                                {{ $page }}
+                            </a>
+                        @endforeach
+
+                        @if ($data->nextPageUrl())
+                            <a class="next page-numbers" href="{{ $data->nextPageUrl() }}">
+                                <span class="screen-reader-text">Next page</span>
+                                >
+                            </a>
+
+                        @endif
+                    </div>
                 </nav>
+
             </main>
 
             <aside class="col-lg-5 col-xl-4">
 
                 <div class="widget widget_search">
                     <h3 class="widget-title">Search</h3>
-                    <form role="search" method="get" class="search-form" action="{{url('blog')}}">
+                    <form method="get" action="{{url('blog')}}">
                         <label for="search-form-widget3">
                             <span class="screen-reader-text">Search for:</span>
                         </label>
-                        <input type="search" id="search-form-widget3" class="search-field" placeholder="Search" value="" name="search">
-                        <button type="submit" class="search-submit">
+                        <input type="search" id="search-form-widget3" class="search-field" placeholder="Search" value="{{request('search')}}" name="search">
+                        <button type="submit" >
                             <span class="screen-reader-text">Search</span>
                         </button>
                     </form>
                 </div>
 
-
-              {{--   <div class="widget widget_categories">
-
-                    <h3 class="widget-title">Categories</h3>
-
-                    <ul>
-                        <li class="cat-item">
-                            <a href="blog-right.html">Corporate</a>
-                            (12)
-                            <ul class="children">
-                                <li class="cat-item">
-                                    <a href="blog-right.html">Business
-                                    </a>
-                                    (1)
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="cat-item">
-                            <a href="blog-right.html">Entertainment</a>
-                            (21)
-                        </li>
-                        <li class="cat-item">
-                            <a href="blog-right.html">Innovations</a>
-                            (18)
-                        </li>
-                        <li class="cat-item">
-                            <a href="blog-right.html">News</a>
-                            (43)
-                        </li>
-                        <li class="cat-item">
-                            <a href="blog-right.html">Knowledge
-                            </a>
-                            (8)
-                        </li>
-                    </ul>
-                </div> --}}
-
-
                 <div class="widget widget_recent_posts">
 
                     <h3 class="widget-title">Top Blog</h3>
                     <ul class="list-unstyled">
+
+                        @foreach ($top_blog as $row)
                         <li class="media">
-                            <a class="media-image" href="blog-single-right.html">
-                                <img src="{{url('public/template/images/gallery/square/01.jpg')}}" alt="">
+                            <a class="media-image" href="{{url('blog')}}">
+                                <img src="{{url('public/blog/'.$row->blog_image)}}" alt="">
                             </a>
                             <div class="media-body">
                                 <h4>
-                                    <a href="blog-single-right.html">Tools of Trading: Modern Marketing</a>
+                                    <a href="{{url('blog')}}">{{$row->blog_title}}</a>
                                 </h4>
                                 <p class="item-meta">
                                     <i class="far fa-calendar-alt"></i>
-                                    02 Jan 19
-                                </p>
-
-                            </div>
-                        </li>
-
-                        <li class="media">
-                            <a class="media-image" href="blog-single-right.html">
-                                <img src="{{url('public/template/images/gallery/square/02.jpg')}}" alt="">
-                            </a>
-                            <div class="media-body">
-                                <h4>
-                                    <a href="blog-single-right.html">Tools of Trading: Modern Marketing</a>
-                                </h4>
-                                <p class="item-meta">
-                                    <i class="far fa-calendar-alt"></i>
-                                    02 Jan 19
+                                    {{ date('d M y', strtotime($row->created_at)) }}
                                 </p>
                             </div>
                         </li>
+                        @endforeach
 
-                        <li class="media">
-                            <a class="media-image" href="blog-single-right.html">
-                                <img src="{{url('public/template/images/gallery/square/03.jpg')}}" alt="">
-                            </a>
-                            <div class="media-body">
-                                <h4>
-                                    <a href="blog-single-right.html">Tools of Trading: Modern Marketing</a>
-                                </h4>
-                                <p class="item-meta">
-                                    <i class="far fa-calendar-alt"></i>
-                                    02 Jan 19
-                                </p>
 
-                            </div>
-                        </li>
 
                     </ul>
                 </div>
@@ -213,23 +157,23 @@
 
                     <div class="tagcloud">
 
-                        <a href="blog-right.html" class="tag-cloud-link">
+                        <a href="{{url('blog')}}" class="tag-cloud-link">
                             oil
                         </a>
 
-                        <a href="blog-right.html" class="tag-cloud-link">
+                        <a href="{{url('blog')}}" class="tag-cloud-link">
                             gas
                         </a>
 
-                        <a href="blog-right.html" class="tag-cloud-link">
+                        <a href="{{url('blog')}}" class="tag-cloud-link">
                             industry
                         </a>
 
-                        <a href="blog-right.html" class="tag-cloud-link">
+                        <a href="{{url('blog')}}" class="tag-cloud-link">
                             plant
                         </a>
 
-                        <a href="blog-right.html" class="tag-cloud-link">
+                        <a href="{{url('blog')}}" class="tag-cloud-link">
                             lab
                         </a>
 

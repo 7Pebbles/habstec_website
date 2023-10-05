@@ -60,6 +60,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
+                                <th>Views</th>
                                 {{-- <th>Category</th> --}}
                                 <th>Image</th>
                                 <th>Action</th>
@@ -116,6 +117,12 @@
                                 "searchable": true,
                                 "orderable": true,
                             },
+                            {
+                                data: 'views',
+                                "searchable": true,
+                                "orderable": true,
+                            },
+
                         /*     {
                                 data: 'blog_category',
                                 "searchable": true,
